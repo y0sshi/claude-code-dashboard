@@ -1,0 +1,29 @@
+{
+  "name": "claude-code-dashboard",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "node scripts/gen-notices.mjs && tsc --noEmit && vite build",
+    "tauri": "tauri",
+    "app:dev": "tauri dev",
+    "app:build": "tauri build",
+    "notices": "node scripts/gen-notices.mjs"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "2.11.1",
+    "@tauri-apps/plugin-notification": "2.4.0",
+    "@tauri-apps/plugin-opener": "2.5.5",
+    "chart.js": "4.6.2",
+    "chartjs-adapter-date-fns": "3.0.0",
+    "date-fns": "4.4.0",
+    "qrcode-generator": "2.0.4"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.11.5",
+    "typescript": "5.9.3",
+    "vite": "8.4.0"
+  }
+}

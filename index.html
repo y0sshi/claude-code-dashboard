@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claude Code Dashboard</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Claude Code Dashboard</h1>
+      <input id="search-input" type="search" placeholder="検索（依頼・返答・タイトル・要約。閉じたセッションも対象）" />
+      <div class="topbar-right tauri-only" id="topbar-right">
+        <label class="toggle" title="同じ tailnet 内のスマホ・タブレット・別の PC のブラウザから閲覧できるようにする（閲覧専用。インターネットには公開されません）">
+          <input type="checkbox" id="remote-toggle" /> リモート閲覧
+        </label>
+        <a id="remote-url" class="remote-url hidden" href="#" title="クリックでQRコードを表示"></a>
+        <div id="remote-pop" class="popover hidden" role="dialog" aria-label="他の端末で開く">
+          <div id="qr" class="qr"></div>
+          <div id="pop-url" class="pop-url"></div>
+          <div class="pop-actions"><button id="pop-copy" class="btn">URLをコピー</button></div>
+          <div id="pop-note" class="pop-note"></div>
+        </div>
+        <label class="toggle" title="claude -p --model haiku で要約（Proプランの使用量を消費）">
+          <input type="checkbox" id="summary-toggle" /> Haiku要約
+        </label>
+        <label class="toggle" title="返事待ちになったら通知音とデスクトップ通知">
+          <input type="checkbox" id="notify-toggle" checked /> 通知
+        </label>
+        <button id="notify-test" class="btn" title="通知音とデスクトップ通知を試す（クリックで音も有効になります）">テスト</button>
+      </div>
+    </header>
+    <div id="progress" class="progress hidden"><div class="bar"></div><span class="label"></span></div>
+
+    <main>
+      <div id="usage-tiles" class="tiles"></div>
+
+      <div id="sections">
+      <details id="sec-sessions" class="section" data-sec="sessions" open>
+        <summary><span class="drag-handle" role="button" tabindex="0" title="ドラッグで並べ替え（キーボードは ↑↓）" aria-label="セクションを並べ替え">⋮⋮</span><span class="sec-title">セッション</span><span class="counts" id="state-counts"></span></summary>
+        <div class="toolbar">
+          <div class="seg" id="session-filter">
+            <button data-f="live" class="active">起動中</button>
+            <button data-f="today">今日</button>
+            <button data-f="week">7日以内</button>
+            <button data-f="all">すべて</button>
+          </div>
+        </div>
+        <div id="cards" class="cards"></div>
+      </details>
+
+      <details id="sec-charts" class="section" data-sec="charts" open>
+        <summary><span class="drag-handle" role="button" tabindex="0" title="ドラッグで並べ替え（キーボードは ↑↓）" aria-label="セクションを並べ替え">⋮⋮</span><span class="sec-title">使用量グラフ</span></summary>
+        <div class="chart-grid">
+          <figure class="chart-card">
+            <figcaption>現在の5時間枠 <span class="sub" id="cap-five"></span></figcaption>
+            <div class="chart-box"><canvas id="chart-five"></canvas></div>
+          </figure>
+          <figure class="chart-card">
+            <figcaption>今週の累計（週枠） <span class="sub" id="cap-week"></span></figcaption>
+            <div class="chart-box"><canvas id="chart-week"></canvas></div>
+          </figure>
+          <figure class="chart-card">
+            <figcaption>5時間枠ごとの使用量（直近7日・プロジェクト別）</figcaption>
+            <div class="chart-box"><canvas id="chart-blocks"></canvas></div>
+          </figure>
+          <figure class="chart-card">
+            <figcaption>週ごとの累計（直近6週・プロジェクト別）</figcaption>
+            <div class="chart-box"><canvas id="chart-weeks"></canvas></div>
+          </figure>
+        </div>
+        <details class="notes">
+          <summary>数値の見方</summary>
+          <div id="usage-notes"></div>
+        </details>
+      </details>
+      </div>
+    </main>
+
+    <aside id="drawer" class="detail hidden" aria-hidden="true">
+      <div class="detail-head">
+        <button id="drawer-back" class="icon-btn hidden" aria-label="検索結果に戻る">←</button>
+        <div>
+          <h2 id="drawer-title"></h2>
+          <div id="drawer-meta" class="meta"></div>
+        </div>
+        <button id="drawer-close" class="icon-btn" aria-label="閉じる">✕</button>
+      </div>
+      <div id="drawer-body" class="detail-body"></div>
+    </aside>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
